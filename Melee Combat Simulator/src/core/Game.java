@@ -37,8 +37,9 @@ public class Game
     int criticalHits;
     int round;
     
-    private static final int NUMBER_OF_BOUTS_PER_MATCHUP = 100;
-	private static final boolean DO_CHARGE_ATTACKS = true;
+//    private static final int NUMBER_OF_BOUTS_PER_MATCHUP = 100;
+	private static boolean poleCharge;
+	private static boolean defendOnPoleCharge;
     @SuppressWarnings("unused")
 	private static final boolean DEBUG = false;
 
@@ -56,8 +57,12 @@ public class Game
 
 	public static void tryAllCombinations(
 		Set<Hero> heroSet,
-		int count)
+		int count, 
+		boolean poleCharge,
+		boolean defendOnPoleCharge)
     {
+		Game.poleCharge = poleCharge;
+		Game.defendOnPoleCharge = defendOnPoleCharge;
 		Map<Hero, Integer> heroStats;
 
 		if (heroSet == null)
@@ -245,55 +250,55 @@ public class Game
     /*
      * Argument is the number of rounds for the bout
      */
-    public static void main(String [] args)
-    {
-    	JFrame frame = new JFrame("Simulation Output");
-		JTextArea textArea = new JTextArea(20, 80);
-		JScrollPane scrollPane = 
-			new JScrollPane(textArea,
-							JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-							JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		textArea.setEditable(false);
-		textArea.setFont(new Font("Courier", Font.PLAIN, 11));
-		frame.getContentPane().add(scrollPane);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
-
-    	tryAllCombinations(null, NUMBER_OF_BOUTS_PER_MATCHUP);
-//        Game game = null;
-//        int count = Integer.parseInt(args[0]);
-//        int[] score = new int[2];
-//        double sumRounds = 0;
+//    public static void main(String [] args)
+//    {
+//    	JFrame frame = new JFrame("Simulation Output");
+//		JTextArea textArea = new JTextArea(20, 80);
+//		JScrollPane scrollPane = 
+//			new JScrollPane(textArea,
+//							JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+//							JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+//		textArea.setEditable(false);
+//		textArea.setFont(new Font("Courier", Font.PLAIN, 11));
+//		frame.getContentPane().add(scrollPane);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.pack();
+//		frame.setVisible(true);
 //
-//        for (int i = 0; i < count; i++)
-//        {
+//    	tryAllCombinations(null, NUMBER_OF_BOUTS_PER_MATCHUP);
+////        Game game = null;
+////        int count = Integer.parseInt(args[0]);
+////        int[] score = new int[2];
+////        double sumRounds = 0;
+////
+////        for (int i = 0; i < count; i++)
+////        {
+//////             game = new Game(new Hero("Panos", 13, 11, Weapon.MORNINGSTAR, Armor.LEATHER, Shield.SMALL_SHIELD),
+//////                             new Hero("Joe the dwarf", 16, 6, Weapon.MORNINGSTAR, Armor.PLATE, Shield.LARGE_SHIELD));
+//////             game = new Game(new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NONE),
+//////                             new Hero("Hacker", 12, 12, Weapon.BROADSWORD, Armor.LEATHER, Shield.SMALL_SHIELD));
+////
 ////             game = new Game(new Hero("Panos", 13, 11, Weapon.MORNINGSTAR, Armor.LEATHER, Shield.SMALL_SHIELD),
-////                             new Hero("Joe the dwarf", 16, 6, Weapon.MORNINGSTAR, Armor.PLATE, Shield.LARGE_SHIELD));
-////             game = new Game(new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NONE),
-////                             new Hero("Hacker", 12, 12, Weapon.BROADSWORD, Armor.LEATHER, Shield.SMALL_SHIELD));
-//
-//             game = new Game(new Hero("Panos", 13, 11, Weapon.MORNINGSTAR, Armor.LEATHER, Shield.SMALL_SHIELD),
-//                             new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NO_SHIELD));
-////            game = new Game(new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NONE),
-////                            new Hero("Panos", 13, 11, Weapon.MORNINGSTAR, Armor.LEATHER, Shield.SMALL_SHIELD));
-//
-//            Hero winner = game.dukeItOut();
-//            if (winner != null)
-//            {
-//                score[(winner == game.hero1 ? 0 : 1)] ++;
-//            }
-//            sumRounds += game.round;
-//        }
-//        if (DEBUG) 
-//        {
-//            Logger.getInstance().getTextArea().append("After " + count + " bouts, the score is:");
-//            Logger.getInstance().getTextArea().append(game.hero1.getName() + ": " + score[0]);
-//            Logger.getInstance().getTextArea().append(game.hero2.getName() + ": " + score[1]);
-//            Logger.getInstance().getTextArea().append("Draws: " + (count - score[0] - score[1]));
-//            Logger.getInstance().getTextArea().append("Average number of rounds per bout: " + (sumRounds/count));
-//        }
-    }
+////                             new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NO_SHIELD));
+//////            game = new Game(new Hero("Z Man", 14, 10, Weapon.TWO_HANDED_SWORD, Armor.NO_ARMOR, Shield.NONE),
+//////                            new Hero("Panos", 13, 11, Weapon.MORNINGSTAR, Armor.LEATHER, Shield.SMALL_SHIELD));
+////
+////            Hero winner = game.dukeItOut();
+////            if (winner != null)
+////            {
+////                score[(winner == game.hero1 ? 0 : 1)] ++;
+////            }
+////            sumRounds += game.round;
+////        }
+////        if (DEBUG) 
+////        {
+////            Logger.getInstance().getTextArea().append("After " + count + " bouts, the score is:");
+////            Logger.getInstance().getTextArea().append(game.hero1.getName() + ": " + score[0]);
+////            Logger.getInstance().getTextArea().append(game.hero2.getName() + ": " + score[1]);
+////            Logger.getInstance().getTextArea().append("Draws: " + (count - score[0] - score[1]));
+////            Logger.getInstance().getTextArea().append("Average number of rounds per bout: " + (sumRounds/count));
+////        }
+//    }
 
     /**
      * attack another hero
@@ -380,7 +385,7 @@ public class Game
             }
 
             /* Charge attack */
-            if (DO_CHARGE_ATTACKS && round==1) 
+            if (Game.poleCharge && round==1) 
             {
             	hero1.setCharging(true);
             	hero2.setCharging(true);
@@ -390,8 +395,8 @@ public class Game
 			/*
 			 * Decide if defending
 			 */
-			tryDefending(hero1);
-			tryDefending(hero2);
+			tryDefending(hero1, hero2);
+			tryDefending(hero2, hero1);
 
             Hero firstAttacker = hero1, secondAttacker = hero2;
             
@@ -452,16 +457,26 @@ public class Game
     /**
 	 * @param firstAttacker
 	 */
-	private void tryDefending(Hero hero)
+	private void tryDefending(Hero defender, Hero attacker)
 	{
-		if (!hero.isKnockedDown() 
-				&& hero.getReadiedWeapon() != null
-				&& hero.sufferingDexPenalty()
-				&& hero.adjustedDx() < 8)
+		if (!defender.isKnockedDown() 
+				&& defender.getReadiedWeapon() != Weapon.NONE
+				&& defender.sufferingDexPenalty()
+				&& defender.adjustedDx() < 8)
 		{
-			hero.setDefending();
-			if (verbose) Logger.getInstance().getTextArea().append(hero.getName() + " is defending this turn.\n");
-		}		
+			defender.setDefending();
+			if (verbose) Logger.getInstance().getTextArea().append(defender.getName() + " is defending this turn because adjDX < 8 and temporarily penalized.\n");
+		}
+		else if (Game.defendOnPoleCharge 
+				&& !defender.isKnockedDown() 
+				&& defender.getReadiedWeapon() != Weapon.NONE
+				&& attacker.getReadiedWeapon() != Weapon.NONE
+				&& attacker.getReadiedWeapon().isPole()
+				&& attacker.isCharging())
+		{
+			defender.setDefending();
+			if (verbose) Logger.getInstance().getTextArea().append(defender.getName() + " is defending this turn because attacker is charging with pole weapon.\n");
+		}
 	}
 
 	private void tryStandUp(Hero hero)
@@ -482,32 +497,41 @@ public class Game
 		}
 	}
 
-    private void tryAttack(Hero attacker, Hero attackee)
-    {
-        if (attacker.isConscious())
-        {
-            if (!attacker.isKnockedDown())
-            {
-            	if (attacker.getReadiedWeapon() != Weapon.NONE)
-            	{
-            		int numDice = attackee.isDefending() ? 4 : 3;
-					resolveAttack(attacker, attackee, Die.rollDice(numDice), numDice);
-            	}
-            	else
-            	{
-					if (verbose) Logger.getInstance().getTextArea().append(attacker.getName() + " is not able to attack because he has has no readied weapon.\n");
-            	}
-            }
-            else
-            {
-                if (verbose) Logger.getInstance().getTextArea().append(attacker.getName() + " is not able to attack because he was knocked down.\n");
-            }
-        }
-        else
-        {
-            if (verbose) Logger.getInstance().getTextArea().append(attacker.getName() + " is not able to attack because he is unconscious.\n");
-        }
-    }
+	private void tryAttack(Hero attacker, Hero attackee) {
+		if (!attacker.isDefending()) {
+			if (attacker.isConscious()) {
+				if (!attacker.isKnockedDown()) {
+					if (attacker.getReadiedWeapon() != Weapon.NONE) {
+						int numDice = attackee.isDefending() ? 4 : 3;
+						resolveAttack(attacker, attackee,
+								Die.rollDice(numDice), numDice);
+					} else {
+						if (verbose)
+							Logger.getInstance()
+									.getTextArea()
+									.append(attacker.getName()
+											+ " is not able to attack because he has has no readied weapon.\n");
+					}
+				} else {
+					if (verbose)
+						Logger.getInstance()
+								.getTextArea()
+								.append(attacker.getName()
+										+ " is not able to attack because he was knocked down.\n");
+				}
+			} else {
+				if (verbose)
+					Logger.getInstance()
+							.getTextArea()
+							.append(attacker.getName()
+									+ " is not able to attack because he is unconscious.\n");
+			}
+		} else {
+			if (verbose)
+				Logger.getInstance().getTextArea()
+						.append(attacker.getName() + " is defending.\n");
+		}
+	}
     
 	private boolean isAutomaticHit(int total, int numDice)
 	{
