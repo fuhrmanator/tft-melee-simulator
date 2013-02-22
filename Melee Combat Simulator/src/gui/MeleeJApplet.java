@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.TreeSet;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -45,7 +46,7 @@ public class MeleeJApplet extends JApplet
 	}
 
 	private static final String SIMULATOR_NAME = "Melee Simulator";
-	private static final String VERSION = "1.2b2 (2013-02-16)";
+	private static final String VERSION = "1.2b3 (2013-02-21)";
 	private static final String COPYRIGHT_YEARS = "2004-2013";
 	private static final String COPYRIGHT_OWNER = "Christopher Fuhrman -- All rights reserved.";
 
@@ -84,20 +85,40 @@ public class MeleeJApplet extends JApplet
 		pane.add(topPanel, BorderLayout.NORTH);
 		pane.add(listScroller, BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		// panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		pane.add(panel, BorderLayout.SOUTH);
+		JPanel bottomPanel = new JPanel();
+		//bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.LINE_AXIS));
+		pane.add(bottomPanel, BorderLayout.SOUTH);
 
-		panel.add(new JLabel("Bouts per matchup:"));		
-		final JSpinner boutCount = new JSpinner();
-		boutCount.setModel(new SpinnerNumberModel(50, 1, 10000, 1));
-		panel.add(boutCount);
+		JPanel optionsPanel = new JPanel();
+		optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
+
+		JPanel boutPanel = new JPanel();
+		JLabel l = new JLabel("Bouts per matchup:");
+		boutPanel.add(l);
+		final JSpinner boutCount = new JSpinner(new SpinnerNumberModel(50, 1, 10000, 1));
+		l.setLabelFor(boutCount);
+		boutPanel.add(boutCount);
+		boutPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		optionsPanel.add(boutPanel);
+
+		final JCheckBox poleChargeCheckBox = new JCheckBox("Pole weapons charge first round");
+		poleChargeCheckBox.setToolTipText("Figures will attempt to charge with pole weapon for double damage.");
+		poleChargeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		optionsPanel.add(poleChargeCheckBox);
+
+		final JCheckBox defendOnPoleChargeCheckBox = new JCheckBox("Defend vs pole charge");
+		defendOnPoleChargeCheckBox.setToolTipText("Figures will attempt to defend when opponent has a pole weapon and charge attacks for double damage, except if they themselves are charge-attacking for double damage.");
+		defendOnPoleChargeCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		optionsPanel.add(defendOnPoleChargeCheckBox);
 
 		final JCheckBox verboseCheckBox = new JCheckBox("Verbose output (caution!)");
-		panel.add(verboseCheckBox);
+		verboseCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		optionsPanel.add(verboseCheckBox);
 
-		JButton startButton = new JButton("Start Mêlée simulator");
-		panel.add(startButton);
+		bottomPanel.add(optionsPanel);
+
+		JButton startButton = new JButton("Start");
+		bottomPanel.add(startButton);
 		
 		final Component theApplet = this;
 		
@@ -142,7 +163,9 @@ public class MeleeJApplet extends JApplet
 								Logger.getInstance().setVerbose(verboseCheckBox.isSelected());
 								Game.tryAllCombinations(
 														selectedPlayers,
-														((Integer) boutCount.getValue()).intValue());
+														((Integer) boutCount.getValue()).intValue(),
+														poleChargeCheckBox.isSelected(),
+														defendOnPoleChargeCheckBox.isSelected());
 								return new Integer(0);
 							}
 						};
