@@ -6,10 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.TreeSet;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -37,6 +35,7 @@ import core.Hero;
  * @version 1.2,    2012-11-15
  */
 
+@SuppressWarnings("serial")
 public class MeleeJApplet extends JApplet
 {
 
